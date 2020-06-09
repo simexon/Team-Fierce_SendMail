@@ -1,0 +1,184 @@
+
+swagger: "2.0"
+info:
+  description: This is the swagger documentation file that goes with our API server code
+  version: "1.0.0"
+  title: SendeMail REST API
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+
+basePath: "/api/v1"
+
+# Paths supported by the server application
+paths:
+  /people:
+    get:
+      operationId: "people.read_all"
+      tags:
+        - "People"
+      summary: "The subscribers list structure supported by the server application"
+      description: "Read the list of subscribers"
+      responses:
+        200:
+          description: "Successful read subcribers list operation"
+          schema:
+            type: "array"
+            items:
+              properties:
+                fname:
+                  type: "string"
+                  description: Full name of the subscriber
+                email:
+                  type: "string"
+                  description: Email address of the subscriber
+                timestamp:
+                  type: "string"
+                  description: Creation/update timestamp of the subscriber
+
+    post:
+      operationId: people.create
+      tags:
+        - People
+      summary: Create a subscriber and add the person to the subscribers list
+      description: Create a new subscriber in the subscribers list
+      parameters:
+        - name: person
+          in: body
+          description: Subscriber to create
+          required: True
+          schema:
+            type: object
+            properties:
+              fname:
+                type: string
+                description: Full name of subscriber to create
+              email:
+                type: string
+                description: Email of subscriber to create
+      responses:
+        201:
+          description: Successfully added subscriber to list
+
+
+  /sendmail:
+    post:
+      operationId: sendmail.sendemail
+      tags:
+        - People
+      summary: Send plain email to subscriber/subscribers
+      description: Send plain email to subscriber/subscribers
+      parameters:
+        - name: people
+          in: body
+          description: subscriber/subscribers to send email to
+          required: True
+          schema:
+            type: object
+            properties:
+              fname:
+                type: string
+                description: Full name of subscriber/subscribers to send email to
+              email:
+                type: string
+                description: Email of subscriber/subscribers to send email to
+      responses:
+        201:
+          description: Successfully sent email to subscriber/subscribers
+
+  /sendmailwithtemplate:
+    post:
+      operationId: sendmailwithtemplate.sendemail_with_template
+      tags:
+        - People
+      summary: Send email to subscriber/subscribers using template
+      description: Send email to subscriber/subscribers using template
+      parameters:
+        - name: people
+          in: body
+          description: subscriber/subscribers to send email to using template
+          required: True
+          schema:
+            type: object
+            properties:
+              fname:
+                type: string
+                description: Full name of subscriber/subscribers to send email to using template
+              email:
+                type: string
+                description: Email of subscriber/subscribers to email to using template
+      responses:
+        201:
+          description: Successfully sent email to subscriber/subscribers using template
+
+
+  /people/{email}:
+    get:
+      operationId: people.read_one
+      tags:
+        - People
+      summary: Read one person from the subscriber list
+      description: Read one person from the subscriber list
+      parameters:
+        - name: email
+          in: path
+          description: Email of the person to get from the list
+          type: string
+          required: True
+      responses:
+        200:
+          description: Successfully read person from subscriber list operation
+          schema:
+            properties:
+              fname:
+                type: string
+                description: Full name of the subscriber to fetch
+              email:
+                type: string
+                description: Email address of the subscriber to fetch
+              timestamp:
+                type: string
+                description: Creation/update timestamp of the subscriber to fetch
+
+    put:
+      operationId: people.update
+      tags:
+        - People
+      summary: Update a person in the subscriber list
+      description: Update a person in the subscriber list
+      parameters:
+        - name: email
+          in: path
+          description: Email of the person to update in the list
+          type: string
+          required: True
+        - name: person
+          in: body
+          schema:
+            type: object
+            properties:
+              fname:
+                type: string
+                description: Full name of the subscriber to update
+              email:
+                type: string
+                description: Email address of the subscriber to update
+      responses:
+        200:
+          description: Successfully updated person in people list
+
+    delete:
+      operationId: people.delete
+      tags:
+        - People
+      summary: Delete a person from the subscribers list
+      description: Delete a subscriber
+      parameters:
+        - name: email
+          in: path
+          type: string
+          required: True
+      responses:
+        200:
+          description: Successfully deleted a person from subscribers list
