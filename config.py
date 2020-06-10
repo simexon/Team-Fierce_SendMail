@@ -2,6 +2,7 @@ import os
 import connexion
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from flask_mail import Mail
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -23,3 +24,12 @@ db = SQLAlchemy(app)
 
 # Initialize Marshmallow
 ma = Marshmallow(app)
+
+app.config['MAIL_SERVER'] = 'personalizedwineng.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = 1
+app.config['MAIL_USERNAME'] = 'service@personalizedwineng.com'
+app.config['MAIL_PASSWORD'] = 'Personalizedwine123*'
+app.config['MAIL_DEFAULT_SENDER'] = ('SendMail', 'service@personalizedwineng.com')
+#initialize Flask Mail
+mail = Mail(app)
