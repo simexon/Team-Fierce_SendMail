@@ -70,19 +70,31 @@ paths:
       summary: Send plain email to subscriber/subscribers
       description: Send plain email to subscriber/subscribers
       parameters:
-        - name: people
+        - name: mail_object
           in: body
           description: subscriber/subscribers to send email to
           required: True
           schema:
             type: object
             properties:
-              fname:
-                type: string
-                description: Full name of subscriber/subscribers to send email to
-              email:
+              recipient:
                 type: string
                 description: Email of subscriber/subscribers to send email to
+              sender:
+                type: string
+                description: Title of the mail
+              subject:
+                type: string
+                description: Email subject
+              body:
+                type: string
+                description: Message content/body
+              cc:
+                type: string
+                description: Carbon copy a recipient for the email
+              bcc:
+                type: string
+                description: Black carbon copy a recipient for the email
       responses:
         201:
           description: Successfully sent email to subscriber/subscribers
@@ -102,12 +114,24 @@ paths:
           schema:
             type: object
             properties:
-              fname:
+              recipient:
                 type: string
-                description: Full name of subscriber/subscribers to send email to using template
-              email:
+                description: Email of subscriber/subscribers to send email to
+              sender:
                 type: string
-                description: Email of subscriber/subscribers to email to using template
+                description: Title of the mail
+              subject:
+                type: string
+                description: Email subject
+              body:
+                type: string
+                description: Message content/body
+              cc:
+                type: string
+                description: Carbon copy a recipient for the email
+              bcc:
+                type: string
+                description: Black carbon copy a recipient for the email
       responses:
         201:
           description: Successfully sent email to subscriber/subscribers using template
