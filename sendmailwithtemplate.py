@@ -1,25 +1,29 @@
-from flask import abort, make_response, jsonify
-from datetime import datetime
-from config import db
-from models import Person, PersonSchema
+from flask import make_response, jsonify
+from mail.flask_mail import flask_template_email
 
-#init schema
-person_schema = PersonSchema()
-people_schema = PersonSchema(many=True)
-
-
-def sendemail_with_template(people):
+def sendemail_with_template(mail_object):
     """
     This function sends email to subscriber/subscribers
     :param people:  person/people to send email to
-    :return:        201 on success, 404 on error
+    :return:        201 on success, 400 on error
     """
-    mailing_list = []
-    len_people = len(people)
-    if people is not None:
-        while len_people > 0:
-            email = people.get('email')
-            mailing_list.append(email)
-            len_people -= 1
-        mailing_group = list(dict.fromkeys(mailing_list))
-    return (mailing_group)
+    if mail_object is not None:
+        sender = mail_object.get('sender')
+        subject = mail_object.get('subject')
+        recipient = mail_object.get('recipient')
+        body = mail_object.get('htmlbody')
+        bcc = mail_object.get('bcc')
+        cc = mail_object.get('cc')
+        
+        if recipient == '' or body == '' or subject == '' or recipient == 'string' or body == 'string' or subject == 'string':
+            response = {
+                'status': 'error',
+                'data':{
+                    'message': 'Error: subject, recipient, htmlbody fields are required.'
+                }
+            }
+            return make_response(jsonify(response), 400)
+        else:
+            body = '<strong>' + body + '</strong>'
+            json_response = flask_template_email(recipient, subject, body, cc, bcc)
+            return json_response
