@@ -1,19 +1,22 @@
 
 swagger: "2.0"
 info:
-  description: This is the swagger documentation file that goes with our API server code
+  description: "This is the documentation file that goes with our API server code (For Demo Interface Use => /v1/sendmail/interface)"
   version: "1.0.0"
-  title: SendeMail REST API
+  title: TEAM-FIERCE => Sendmail REST API
 consumes:
   - "application/json"
+  - "application/x-yaml"
 produces:
   - "application/json"
+  # - "application/xml"
+  - "application/x-yaml"
 
-basePath: "/api/v1"
+basePath: "/v1"
 
 # Paths supported by the server application
 paths:
-  /people:
+  /sendmail/people:
     get:
       operationId: "people.read_all"
       tags:
@@ -66,7 +69,7 @@ paths:
     post:
       operationId: sendmail.sendemail
       tags:
-        - People
+        - Sendmail
       summary: Send plain email to subscriber/subscribers
       description: Send plain email to subscriber/subscribers
       parameters:
@@ -103,11 +106,11 @@ paths:
     post:
       operationId: sendmailwithtemplate.sendemail_with_template
       tags:
-        - People
+        - Sendmail
       summary: Send email to subscriber/subscribers using template
       description: Send email to subscriber/subscribers using template
       parameters:
-        - name: people
+        - name: mail_object
           in: body
           description: subscriber/subscribers to send email to using template
           required: True
@@ -123,7 +126,7 @@ paths:
               subject:
                 type: string
                 description: Email subject
-              body:
+              htmlbody:
                 type: string
                 description: Message content/body
               cc:
@@ -137,7 +140,7 @@ paths:
           description: Successfully sent email to subscriber/subscribers using template
 
 
-  /people/{email}:
+  /sendmail/people/{email}:
     get:
       operationId: people.read_one
       tags:
@@ -161,10 +164,7 @@ paths:
               email:
                 type: string
                 description: Email address of the subscriber to fetch
-              timestamp:
-                type: string
-                description: Creation/update timestamp of the subscriber to fetch
-
+            
     put:
       operationId: people.update
       tags:
@@ -197,12 +197,13 @@ paths:
       tags:
         - People
       summary: Delete a person from the subscribers list
-      description: Delete a subscriber
+      description: Delete a subscriber from the list
       parameters:
         - name: email
           in: path
           type: string
           required: True
+          description: Email of the person to delete
       responses:
         200:
           description: Successfully deleted a person from subscribers list
