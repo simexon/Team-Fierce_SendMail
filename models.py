@@ -1,15 +1,15 @@
-from datetime import datetime
+from datetime import datetime, date
 from config import db, ma
 
 
 class Person(db.Model):
     __tablename__ = 'person'
     person_id = db.Column(db.Integer, primary_key=True)
-    fname = db.Column(db.String(50))
+    fname = db.Column(db.String(50), default='')
     email = db.Column(db.String(50), unique=True, index=True)
     timestamp = db.Column(db.DateTime,
-                          default=datetime.utcnow,
-                          onupdate=datetime.utcnow)
+                          default=date.today,
+                          onupdate=date.today)
     
     def __init__(self, fname, email):
         self.fname = fname
