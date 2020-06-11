@@ -17,7 +17,7 @@ ns.model = (function () {
         'read': function () {
             let ajax_options = {
                 type: 'GET',
-                url: 'api/v1/people',
+                url: 'v1/people',
                 accepts: 'application/json',
                 dataType: 'json'
             };
@@ -33,7 +33,7 @@ ns.model = (function () {
         create: function (fname, email) {
             let ajax_options = {
                 type: 'POST',
-                url: 'api/v1/people',
+                url: 'v1/people',
                 accepts: 'application/json',
                 contentType: 'application/json',
                 dataType: 'json',
@@ -60,7 +60,7 @@ ns.model = (function () {
         update: function (fname, email) {
             let ajax_options = {
                 type: 'PUT',
-                url: 'api/v1/people/' + email,
+                url: 'v1/people/' + email,
                 accepts: 'application/json',
                 contentType: 'application/json',
                 dataType: 'json',
@@ -86,7 +86,7 @@ ns.model = (function () {
         'delete': function (email) {
             let ajax_options = {
                 type: 'DELETE',
-                url: 'api/v1/people/' + email,
+                url: 'v1/people/' + email,
                 accepts: 'application/json',
                 contentType: 'plain/text'
             };
@@ -102,7 +102,49 @@ ns.model = (function () {
                 .fail(function (xhr, textStatus, errorThrown) {
                     $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
                 })
-        }
+        },
+
+        'fetch_mailing_list': function () {
+            let ajax_options = {
+                type: 'GET',
+                url: 'v1/people',
+                accepts: 'application/json',
+                dataType: 'json'
+            };
+            $.ajax(ajax_options)
+                .done(function (data) {
+                    var mailing_list = [];
+                    for (var i = 0; i < data.length; i++) {
+                        var email = data[i].email;
+                        mailing_list.push(email);
+                    }
+                    if (data.length > 0) {
+                        // mailing_list = mailing_list.slice(1);
+
+                        // Load the recipient fields with mail_list from API
+                        $('#mail_recipients').val(mailing_list);
+
+                        $('#mail_msg').removeClass('alert alert-danger').addClass('alert alert-info');
+                        $('#mail_msg').text('Mailing list loaded successfully.').show();
+                        setTimeout(function () {
+                            $('#mail_msg').hide();
+                        }, 3000);
+                    } else {
+                        $('#mail_msg').removeClass('alert alert-danger').addClass('alert alert-warning');
+                        $('#mail_msg').text('Oops! mailing list is empty.').show();
+                        setTimeout(function () {
+                            $('#mail_msg').hide();
+                        }, 4000);
+                    }
+                })
+                .fail(function (xhr, textStatus, errorThrown) {
+                    $('#mail_msg').removeClass('success').addClass('alert error');
+                    $('#mail_msg').text('Oops! error fetching mailing list.').show();
+                    setTimeout(function () {
+                        $('#mail_msg').hide();
+                    }, 4000);
+                });
+        },
     };
 }());
 
@@ -134,7 +176,7 @@ ns.view = (function () {
             // did we get a people array?
             if (people) {
                 for (let i = 0, l = people.length; i < l; i++) {
-                    rows += `<tr title="Double Click to Edit"><td class="fname">${people[i].fname}</td><td class="email">${people[i].email}</td><td>${people[i].timestamp}</td></tr>`;
+                    rows += `<tr title="Double Click to Edit"><td class="fname">${people[i].fname}</td><td class="email">${people[i].email}</td><td>` + (people[i].timestamp) + `</td></tr>`;
                 }
                 $('table > tbody').append(rows);
             }
@@ -202,19 +244,25 @@ ns.controller = (function (m, v) {
         let email = $email.val();
 
         e.preventDefault();
+        var result = confirm('Are you sure you want to delete this record?');
+        if (result === true) {
 
-        if (validate('placeholder1', 'placeholder2', email)) {
-            model.delete(email)
-        } else {
-            alert('Problem with email input');
+            if (validate('placeholder1', 'placeholder2', email)) {
+                model.delete(email)
+            } else {
+                alert('Problem with email input');
+            }
         }
-        e.preventDefault();
 
     });
 
     $('#reset').click(function () {
         view.reset();
-    })
+    });
+
+    $('#mail_list').click(function () {
+        model.fetch_mailing_list();
+    });
 
     $('table > tbody').on('dblclick', 'tr', function (e) {
         let $target = $(e.target),
@@ -256,8 +304,84 @@ ns.controller = (function (m, v) {
     });
 
     $event_pump.on('model_error', function (e, xhr, textStatus, errorThrown) {
-        let error_msg = textStatus + ': ' +xhr.responseJSON.detail;
+        let error_msg = textStatus + ': ' + xhr.responseJSON.detail;
         view.error(error_msg);
         console.log(error_msg);
     })
 }(ns.model, ns.view));
+
+$(document).ready(function () {
+    //Sendmail Demo form
+    $('#mail_form').submit(function (event) {
+        event.preventDefault();
+        let subject = $('#mail_subject').val();
+        let message = $('#mail_message').val();
+        let recipients = $('#mail_recipients').val();
+        let is_mail_template = $('#mail_template').prop('checked');
+        if (!subject || !message || !recipients) {
+            $('#mail_msg').removeClass('alert-alert-info');
+            $('#mail_msg').removeClass('alert-alert-sucess').addClass('alert alert-danger');
+            $('#mail_msg').text('All fields are required').show();
+            setTimeout(function () {
+                $('#mail_msg').hide();
+            }, 4000);
+        } else {
+            $('#mail_msg').removeClass('alert-alert-danger');
+            $('#mail_msg').removeClass('alert-alert-sucess').addClass('alert alert-info');
+            $('#mail_msg').text('Processing...').show();
+
+            if (is_mail_template) {
+                let ajax_options = {
+                    type: 'POST',
+                    url: '/sendmail/html',
+                    data: { 'subject': subject, 'message': message, 'recipients': recipients },
+                    accepts: 'application/json',
+                    dataType: 'json'
+                };
+                $.ajax(ajax_options).done(function (res) {
+                    $('#mail_form')[0].reset();
+                    $('#mail_msg').removeClass('alert alert-info');
+                    $('#mail_msg').removeClass('alert alert-danger').addClass('alert alert-success');
+                    $('#mail_msg').text(res.data.message).show();
+                    setTimeout(function () {
+                        $('#mail_msg').hide();
+                    }, 4000);
+                }).fail(function (res) {
+                    $('#mail_msg').removeClass('alert-alert-info');
+                    $('#mail_msg').removeClass('alert-alert-sucess').addClass('alert alert-danger');
+                    $('#mail_msg').text(res.data.message).show();
+                    setTimeout(function () {
+                        $('#mail_msg').hide();
+                    }, 4000);
+
+                });
+            } else {
+                let ajax_options = {
+                    type: 'POST',
+                    url: '/sendmail/text',
+                    data: { 'subject': subject, 'message': message, 'recipients': recipients },
+                    accepts: 'application/json',
+                    dataType: 'json'
+                };
+                $.ajax(ajax_options).done(function (res) {
+                    $('#mail_form')[0].reset();
+                    $('#mail_msg').removeClass('alert alert-info');
+                    $('#mail_msg').removeClass('alert alert-danger').addClass('alert alert-success');
+                    $('#mail_msg').text(res.data.message).show();
+                    setTimeout(function () {
+                        $('#mail_msg').hide();
+                    }, 4000);
+                }).fail(function (res) {
+                    $('#mail_msg').removeClass('alert alert-info');
+                    $('#mail_msg').removeClass('alert alert-success').addClass('alert alert-danger');
+                    $('#mail_msg').text(res.data.message).show();
+                    setTimeout(function () {
+                        $('#mail_msg').hide();
+                    }, 4000);
+
+                });
+            }
+        }
+
+    });
+});
