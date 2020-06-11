@@ -30,6 +30,6 @@ app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = 1
 app.config['MAIL_USERNAME'] = 'service@personalizedwineng.com'
 app.config['MAIL_PASSWORD'] = 'Personalizedwine123*'
-app.config['MAIL_DEFAULT_SENDER'] = ('SendMail', 'service@personalizedwineng.com')
+app.config['MAIL_DEFAULT_SENDER'] = ('Team-Fierce', 'service@personalizedwineng.com')
 #initialize Flask Mail
 mail = Mail(app)
