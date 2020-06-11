@@ -22,7 +22,7 @@
 
 <body>
     <nav class="navbar navbar-expand-sm navbar-light bg-light">
-        <a class="navbar-brand" href="{{url_for('home')}}">SendMail</a>
+        <a class="navbar-brand text-info" href="{{url_for('home')}}">Team-Fierce</a>
         <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId"
             aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -37,35 +37,39 @@
                             class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="api/v1/ui">Swagger_UI</a>
+                    <a class="nav-link" href="/v1/ui">API Documentation</a>
+                </li>                
+                <li class="nav-item">
+                    <a class="nav-link" href="/v1/swagger.json">API Documentation (JSON)</a>
                 </li>
         </div>
     </nav>
     <div class="container pt-3">
         <h2 class="banner pt-3">Send Email</h2>
         <br>
-        <form action="" class="form">
+        <form action="" class="form" id="mail_form" method="POST">
             <div class="section editor">
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="sender">Sender</label>
                     <input class="form-control" id="sender" type="text" />
-                </div>
+                </div> -->
                 <div class="form-group">
                     <label for="subject">Subject</label>
-                    <input class="form-control" id="subject" type="text" />
+                    <input class="form-control" id="mail_subject" type="text" required/>
                 </div>
                 <div class="form-group">
                     <label for="subject">Message</label>
-                    <textarea class="form-control" id="message" placeholder="Compose message content"></textarea>
+                    <textarea class="form-control" id="mail_message" placeholder="Compose message content" required></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="email">Recipient(s)</label><span class="btn btn-dark float-right btn-sm">From
-                        List</span>
-                    <textarea class="form-control" id="recipient" value="" placeholder="Email recipient(s)"></textarea>
+                    <label for="email">Recipient(s) Email</label><span id="mail_list" class="btn btn-dark float-right btn-sm">From
+                        API</span>
+                    <textarea class="form-control" id="mail_recipients" value="" placeholder="Separate multiple emails with ," required></textarea>
                 </div>
+                <div id="mail_msg"></div>
                 <div class="form-group pt-3 col-offset-lg-4 col-offset-md-4">
-                    <button id="create">Send Email</button>
-                    <div class="form-group float-right"><input type="checkbox" />&nbsp;<label
+                    <button id="mail_btn">Send Email</button>
+                    <div class="form-group float-right"><input id="mail_template" type="checkbox" />&nbsp;<label
                             for="template">Use template</label></div>
                 </div>
             </div>
