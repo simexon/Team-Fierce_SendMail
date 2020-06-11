@@ -1,6 +1,7 @@
 
 from flask import abort, make_response, jsonify
 from datetime import datetime
+from markupsafe import Markup, escape
 from config import db
 from models import Person, PersonSchema
 
@@ -12,7 +13,7 @@ people_schema = PersonSchema(many=True)
 # Create a handler for our read (GET) people
 def read_all():
     """
-    This function responds to a request for /api/v1/people
+    This function responds to a request for /v1/people
     with the complete list of subscribers
 
     :return: sorted list of subscribers
@@ -49,8 +50,12 @@ def create(person):
     :param person:  person to create in subscribers structure
     :return:        201 on success, 406 on person exist
     """
-    fname = person.get("fname")
-    email = person.get("email")
+    fname = Markup.escape(person.get("fname"))
+    email = Markup.escape(person.get("email"))
+    if email is None or email == '' or email == 'string':
+        abort(
+            400, "Person's email is required"
+        )
     
     create_person = Person(fname, email)
         
@@ -85,13 +90,17 @@ def update(email, person):
     update_person = Person.query.filter(Person.email == email).one_or_none()
 
     # Try to find an existing person with the same name as the update
-    fname = person.get("fname")
-    email = person.get("email")
+    fname = Markup.escape(person.get("fname"))
+    email = Markup.escape(person.get("email"))
+    if email is None or email == '' or email == 'string':
+        abort(
+            400, "Person's email is required"
+        )
 
     # Are we trying to find a person that does not exist?
     if update_person is None:
         abort(
-            404, "Person with email {email} not found".format(email=email)
+            400, "Person with email {email} not found".format(email=email)
         )
 
     # Otherwise go ahead and update!
@@ -99,7 +108,6 @@ def update(email, person):
 
         # turn the passed in person into a db object
         update_person.fname = fname
-        update_person.email = email
 
         # merge the new object into the old and commit it to the db
         db.session.commit()
