@@ -17,7 +17,7 @@ ns.model = (function () {
         'read': function () {
             let ajax_options = {
                 type: 'GET',
-                url: 'v1/people',
+                url: 'people',
                 accepts: 'application/json',
                 dataType: 'json'
             };
@@ -26,14 +26,14 @@ ns.model = (function () {
                     $event_pump.trigger('model_read_success', [data]);
                 })
                 .fail(function (xhr, textStatus, errorThrown) {
-                    alert('fail');
+                    alert('failed to load subscribers list');
                 })
         },
 
         create: function (fname, email) {
             let ajax_options = {
                 type: 'POST',
-                url: 'v1/people',
+                url: 'people',
                 accepts: 'application/json',
                 contentType: 'application/json',
                 dataType: 'json',
@@ -60,7 +60,7 @@ ns.model = (function () {
         update: function (fname, email) {
             let ajax_options = {
                 type: 'PUT',
-                url: 'v1/people/' + email,
+                url: 'people/' + email,
                 accepts: 'application/json',
                 contentType: 'application/json',
                 dataType: 'json',
@@ -86,7 +86,7 @@ ns.model = (function () {
         'delete': function (email) {
             let ajax_options = {
                 type: 'DELETE',
-                url: 'v1/people/' + email,
+                url: 'people/' + email,
                 accepts: 'application/json',
                 contentType: 'plain/text'
             };
@@ -107,7 +107,7 @@ ns.model = (function () {
         'fetch_mailing_list': function () {
             let ajax_options = {
                 type: 'GET',
-                url: 'v1/people',
+                url: 'people',
                 accepts: 'application/json',
                 dataType: 'json'
             };
