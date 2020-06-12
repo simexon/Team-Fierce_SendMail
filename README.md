@@ -52,33 +52,38 @@ www.python.org
 ```
 
 To start the sytem navigate to the project folder,
-Open the terminal and execute python server.py
-Open the link of local server on the terminal in the browser,
+Open the terminal/cmd and run => pip install -r requirements.txt (To install dependencies)
+aOn the terminal/cmd execute => python server.py
+Open the link of the local server on the terminal in the browser,
 Enter the endpoints specified below to access the different actions
 
 The SendMAil API includes the following endpoints:
 
-1. /api/v1/people 
-   This endpoint responds to a request for /api/v1/people
+=>   /v1/documentation
+    This endpoint responds with a json version of all endpoint documentation
+=>   /v1/configure
+    @Todo ...
+1. /v1/sendmail/people 
+   This endpoint responds to a request for /v1/sendmail/people
    with the complete lists of people
 
-2. /api/v1/people/{email} 
-    This endpoint responds to a request for /api/v1/people/{email}
+2. /v1/sendmail/people/{email} 
+    This endpoint responds to a request for /v1/sendmail/people/{email}
     with the details of a person or delete action status
     :param email:   email address of person to get details about or delete
 
-3. /api/v1/people/{person} 
+3. /v1/sendmail/people/{person} 
     This endpoint creates a new person in the people structure
     based on the passed in person data
     :param person:   person object to create
 
-4. /api/v1/people/{email, people}
+4. /v1/sendmail/people/{email, people}
     This endpoint updates an existing person in the people structure
 
-5. /api/v1/sendmail
+5. /v1/sendmail
     This endpoint sends a plain email to subscriber/subscribers
 
-6. /api/v1/sendmailwithtemplate
+6. /v1/sendmailwithtemplate
     This endpoint sends a template email to subscriber/subscribers
     
 
