@@ -21,3 +21,10 @@ class PersonSchema(ma.Schema):
         fields = ('fname', 'email', 'timestamp')
         model = Person
         
+
+class Users(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    public_id = db.Column(db.Integer)
+    username = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+    admin = db.Column(db.Boolean)
