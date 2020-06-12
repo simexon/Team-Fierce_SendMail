@@ -52,7 +52,7 @@ www.python.org
 <br>
 -Open the terminal/cmd and run => <strong>pip install -r requirements.txt</strong> (To install dependencies)
 <br>
--On the terminal/cmd execute => <strong>python server.py<strong>
+-On the terminal/cmd execute => <strong>python server.py</strong>
 <br>
 -Open the link of the local server on the terminal in the browser,
 <br>
@@ -68,27 +68,26 @@ The SendMAil API includes the following endpoints:
 =>   /v1/configure
     @Todo ...
 1. /v1/sendmail/people 
-   This endpoint responds to a request for /v1/sendmail/people
-   with the complete lists of people
-<br>
-2. /v1/sendmail/people/{email} 
-    This endpoint responds to a request for /v1/sendmail/people/{email}
+   => This endpoint responds to a request for /v1/sendmail/people with the complete lists of people
+<br><br>
+2. <stron>/v1/sendmail/people/{email}</strong>
+    => This endpoint responds to a request for /v1/sendmail/people/{email}
     with the details of a person or delete action status
     :param email:   email address of person to get details about or delete
-<br>
-3. /v1/sendmail/people/{person} 
-    This endpoint creates a new person in the people structure
+<br><br>
+3. <strong>/v1/sendmail/people/{person}</strong>
+    => This endpoint creates a new person in the people structure
     based on the passed in person data
     :param person:   person object to create
+<br><br>
+4. <strong>/v1/sendmail/people/{email, people}</strong>
+    => This endpoint updates an existing person in the people structure
+<br><br>
+5. <strong>/v1/sendmail</strong>
+    => This endpoint sends a plain email to subscriber/subscribers
 <br>
-4. /v1/sendmail/people/{email, people}
-    This endpoint updates an existing person in the people structure
-<br>
-5. /v1/sendmail
-    This endpoint sends a plain email to subscriber/subscribers
-<br>
-6. /v1/sendmailwithtemplate
-    This endpoint sends a template email to subscriber/subscribers
+6. <strong>/v1/sendmailwithtemplate</strong>
+    => This endpoint sends a template email to subscriber/subscribers
 
 
 ## 🎈 Usage <a name="usage"></a>
