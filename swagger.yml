@@ -6,11 +6,10 @@ info:
   title: TEAM-FIERCE => Sendmail REST API
 consumes:
   - "application/json"
-  - "application/x-yaml"
+
 produces:
   - "application/json"
-  # - "application/xml"
-  - "application/x-yaml"
+
 
 basePath: "/v1"
 

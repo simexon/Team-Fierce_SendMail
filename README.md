@@ -62,15 +62,16 @@ The SendMAil API includes the following endpoints:
  <br><br>
  <img width=1000 height=600px src="https://github.com/gblend/Team-Fierce_SendMail/blob/master/static/images/documentation_ui.PNG?raw=true" alt="Project logo"></a>
 <br><br>
-=>   /v1/documentation
-    This endpoint responds with a json version of all endpoint documentation
-<br>
-=>   /v1/configure
+=>   <strong>/v1/documentation</strong>
+    => This endpoint responds with a json version of all endpoint documentation
+<br><br>
+=>   <strong>/v1/configure</strong>
     @Todo ...
-1. /v1/sendmail/people 
+<br>
+1. <strong>/v1/sendmail/people</strong> 
    => This endpoint responds to a request for /v1/sendmail/people with the complete lists of people
 <br><br>
-2. <stron>/v1/sendmail/people/{email}</strong>
+2. <strong>/v1/sendmail/people/{email}</strong>
     => This endpoint responds to a request for /v1/sendmail/people/{email}
     with the details of a person or delete action status
     :param email:   email address of person to get details about or delete
@@ -92,7 +93,11 @@ The SendMAil API includes the following endpoints:
 
 ## 🎈 Usage <a name="usage"></a>
 
-To checkout the endpoints, navigate to the endpoint url as specified at [Getting Started](#getting_started) section
+To checkout the endpoints, navigate to the endpoints urls as specified at [Getting Started](#getting_started) section
+<br>
+<strong>/v1/sendmail/interface</strong>
+<br>
+<img width=1000 height=600 src="https://github.com/gblend/Team-Fierce_SendMail/blob/master/static/images/interface.PNG?raw=true" alt="Interface img"/><br>
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
